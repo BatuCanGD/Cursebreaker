@@ -159,6 +159,20 @@ public:
         Full
     };
 
+    const double redinforcement[3]{
+        1.0,
+        0.5,
+        0.0
+    };
+
+
+    const double blueinforcement[3]{
+        1.0,
+        0.5,
+        0.0
+    };
+
+
     InfinityAdaptation infinity_bypass = InfinityAdaptation::None;
     InfinityAdaptation prev_infinity = InfinityAdaptation::None;
 
@@ -305,6 +319,22 @@ public:
     bool domain_amplification = false;
 
     int purple_charge = 0;
+
+    enum class ReinforcementLevel {
+        Max,
+        High,
+        MediumHigh,
+        Medium,
+        MediumLow,
+        Low,
+        Critical
+    };
+
+    const double ReinforcementMult[7] {
+        0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1
+    };
+
+    ReinforcementLevel reinforcement = ReinforcementLevel::Critical;
 
     enum class WorldCuttingStatus {
         None,
@@ -500,9 +530,6 @@ public:
     const double purple_ce_limit[5] = { 125.0, 200.0, 300.0, 500.0, 1000.0 };
     const double red_ce_limit[4] = { 15.0, 35.0, 60.0, 90.0 };
     const double blue_ce_limit[4] = { 10.0, 25.0, 50.0, 75.0 };
-    size_t R_CE_needed = 0;
-    size_t B_CE_needed = 0;
-    size_t P_CE_needed = 0;
 
 
 
@@ -994,19 +1021,16 @@ public:
     void PurpleUsed() {
         P_chantimeter = 0;
         P_chantometer = 2;
-        P_CE_needed = 0;
         purple_status = PurpleCharge::None;
     }
     void RedUsed() {
         R_chantimeter = 0;
         R_chantometer = 2;
-        R_CE_needed = 0;
         red_status = RedCharge::None;
     }
     void BlueUsed() {
         B_chantimeter = 0;
         B_chantometer = 2;
-        B_CE_needed = 0;
         blue_status = BlueCharge::None;
     }
 
@@ -1355,6 +1379,7 @@ void Gojo::Use_hands(Sukuna& s, Mahoraga& m) {
     }
     const double raw_strength = 2.5;
     int chance = getrandint(1, 100);
+
     std::cout << "\n\n";
     if ((chance == 100 || chance == 1) && composure >= 95.0) {
         s.sukuna_attacked_fists(m, *this, raw_strength * 100);
@@ -1378,6 +1403,7 @@ void Gojo::Use_hands(Sukuna& s, Mahoraga& m) {
 }
 void Sukuna::sukuna_attacked_fists(Mahoraga& m, Gojo& g, double damage) {
     int missdifier = getrandint(1, 100);
+    int rein = static_cast<int>(reinforcement);
 
     if (SukunaInShadows()) {
         std::cout << "Sukuna is in the shadows, you cant go hand to hand with him\n";
@@ -1406,18 +1432,9 @@ void Sukuna::sukuna_attacked_fists(Mahoraga& m, Gojo& g, double damage) {
     }
     else {
         if (missdifier > 30 && g.composure >= 30.0) {
-            if (SukunaDefending()) {
-                std::cout << "You hit Sukuna with the full force of your punch!\n";
-                std::cout << "Sukuna reinforced some of the oncoming damage!\n";
-                std::cout << "He took " << damage * 0.4 << " damage!\n";
-                take_Damage(damage * 0.4);
-            }
-            else {
-                std::cout << "You hit Sukuna with the full force of your punch!\n";
-                std::cout << "Sukuna couldnt defend in time and got hit with your punch\n";
-                std::cout << "He took " << damage * 0.6 << " damage!\n";
-                take_Damage(damage * 0.6);
-            }
+            std::cout << "You hit Sukuna with the full force of your punch!\n";
+            std::cout << "He took " << damage * ReinforcementMult[rein] << " damage!\n";
+            take_Damage(damage * ReinforcementMult[rein]);
         }
         else if (g.composure < 30.0){
             std::cout << "You missed your punch! you cant keep your head clear.\n";
@@ -1460,15 +1477,12 @@ void Gojo::Use_technique(Mahoraga& m, Sukuna& s) { // 1-blue 2-red 3-purple
     int midmultiplier = getrandint(3, 10); // close
     int smallmultiplier = getrandint(1, 3); // far away
     int bigmultiplier = getrandint(10, 20); // strong attack
-    int attack_chance = getrandint(1, composure);
-
-    if (attack_chance < 20)
-
 
     switch (current_ct) {
     case CurrentCursedTechnique::Blue: {
         int bluecharge = static_cast<int>(blue_status);
-
+        double Bdamage = blue_base * blue_ce_limit[bluecharge];
+             
         if (cursed_energy < blue_ce_limit[bluecharge]) {
             std::cout << "You dont have enough cursed energy to activate Blue.\n";
             std::cout << "You need " << blue_ce_limit[bluecharge] - cursed_energy << " more Cursed Energy!\n";
@@ -1496,8 +1510,8 @@ void Gojo::Use_technique(Mahoraga& m, Sukuna& s) { // 1-blue 2-red 3-purple
                 }
             }
             else {
-                std::cout << "You hit Sukuna with a " << blue_base * smallmultiplier << " damage blue!\n";
-                s.sukuna_attacked(m, *this, blue_base * smallmultiplier);
+                std::cout << "You hit Sukuna with a " << Bdamage * smallmultiplier << " damage blue!\n";
+                s.sukuna_attacked(m, *this, Bdamage * smallmultiplier);
             }
         }
         else if (s.SukunaCloseBy()) {
