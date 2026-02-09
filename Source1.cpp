@@ -1,10 +1,7 @@
 #include <iostream>
-#include <ctime>
-#include <cstdlib>
-#include <cmath>
+#include <random>
 #include "Header.h"
 
-using std::string;
 using std::endl;
 
 class Mahoraga; // the one that adapts
@@ -18,6 +15,7 @@ void GameMaster::increment_turn() {
     turn_amount++;
 }
 
+int getrandint(int, int);
 
 class Air {
 public:
@@ -129,7 +127,7 @@ public:
                 prev_red = red_nullification;
             }
         }
-        if (health >= maxhealth) health = maxhealth;
+        if (health > maxhealth) health = maxhealth;
     }
 
     enum class MahoragaState {
@@ -207,7 +205,6 @@ public:
     double infinity_adaptation = 0.0;
     double red_adaptation = 0.0;
     double blue_adaptation = 0.0;
-    double mahoraga_health = 200.0;
 
 
     bool activate_wheel() { /// inactive to active
@@ -300,7 +297,7 @@ public:
     const double maxhealth = health;
     double previous_health = health;
     double cursed_energy = 15000.0;
-    const double maxcursed_energy = cursed_energy;
+    const double max_cursed_energy = cursed_energy;
 
     bool stunned = false;
     int stuntimer = 2;
@@ -338,6 +335,14 @@ public:
     double confidence = 100.0;
     double fear = 0.0;
 
+    void passive_CE_regen() {
+        if (cursed_energy >= max_cursed_energy) {
+            return;
+        }   
+        else {
+            cursed_energy += 25.0;
+        }
+    }
 
     enum class SukunaFightStatus {
         FightingFar,
@@ -483,12 +488,23 @@ public:
     double health = 1000.0;
     const double maxhealth = health;
     double cursed_energy = 8000.0;
+    const double max_cursed_energy = cursed_energy;
     double composure = 100.0;
     bool using_infinity = true;
     int domain_turn_timer = 3;
     int domain_use_limit = 5;
     int brain_heal_turn = 10;
     double burnout_mult = 1.0;
+
+
+    const double purple_ce_limit[5] = { 125.0, 200.0, 300.0, 500.0, 1000.0 };
+    const double red_ce_limit[4] = { 15.0, 35.0, 60.0, 90.0 };
+    const double blue_ce_limit[4] = { 10.0, 25.0, 50.0, 75.0 };
+    size_t R_CE_needed = 0;
+    size_t B_CE_needed = 0;
+    size_t P_CE_needed = 0;
+
+
 
     enum class CurrentCursedTechnique {
         None,
@@ -501,7 +517,40 @@ public:
         NineRopes,
         PolarisedLight,
         CrowandShomyo,
-        TheGapBetween,
+        TheGapBetween, // max charge
+    };
+    enum class RedCharge {
+        None,
+        Phase, // both red and blue are phase, impossible to combine without complicating it!!!!
+        Paramita,
+        PillarsOfLight // max charge
+    };
+    enum class BlueCharge {
+        None,
+        Phase,
+        Twilight,
+        EyesOfWisdom // max charge
+    };
+
+    const double blue_multiplier[4]{
+        1.0,
+        2.0,
+        3.0,
+        4.0
+    };
+
+    const double purple_multiplier[5] {
+        1.0,  // None
+        2.0,  // NineRopes
+        3.5,  // PolarisedLight
+        5.0,  // CrowandShomyo
+        7.5   // TheGapBetween
+    };
+    const double red_multiplier[4]{
+        1.0,
+        2.0,
+        3.0,
+        4.0
     };
     enum class FightingStyle {
         Aggressive,
@@ -531,11 +580,22 @@ public:
 
 
     CurrentCursedTechnique current_ct = CurrentCursedTechnique::None;
+
     DomainStatus domain_status = DomainStatus::Inactive;
+
     FightingStyle fighting_style = FightingStyle::Focused;
+
     ReverseCursedTechnique rct_healing = ReverseCursedTechnique::Inactive;
     TechniqueStatus technique_status = TechniqueStatus::Active;
+
     PurpleCharge purple_status = PurpleCharge::None;
+    PurpleCharge prev_p_status = PurpleCharge::None;
+
+    BlueCharge blue_status = BlueCharge::None;
+    BlueCharge prev_b_status = BlueCharge::None;
+
+    RedCharge red_status = RedCharge::None;
+    RedCharge prev_r_status = RedCharge::None;
 
     bool broken_guard()const {
         return fighting_style == FightingStyle::Disrupted;
@@ -562,6 +622,14 @@ public:
     }
     bool using_purple()const {
         return current_ct == CurrentCursedTechnique::Purple;
+    }
+
+    bool stop_using_techniques() {
+        if (current_ct != CurrentCursedTechnique::None) {
+            current_ct = CurrentCursedTechnique::None;
+            return true;
+        }
+        return false;
     }
 
     bool use_ct_red() {
@@ -648,35 +716,63 @@ public:
     bool purple_fully_charged()const { // 4;
         return purple_status == PurpleCharge::TheGapBetween;
     }
+    bool set_red_0() {
+        if (red_status != RedCharge::None) {
+            red_status = RedCharge::None;
+            return true;
+        }
+        return false;
+    }
+    bool set_red_1() {
+        if (red_status != RedCharge::Phase) {
+            red_status = RedCharge::Phase;
+            return true;
+        }
+        return false;
+    }
+    bool set_red_2() {
+        if (red_status != RedCharge::Paramita) {
+            red_status = RedCharge::Paramita;
+            return true;
+        }
+        return false;
+    }
+    bool set_red_3() {
+        if (red_status != RedCharge::PillarsOfLight) {
+            red_status = RedCharge::PillarsOfLight;
+            return true;
+        }
+        return false;
+    }
+    bool set_blue_0() {
+        if (blue_status != BlueCharge::None) {
+            blue_status = BlueCharge::None;
+            return true;
+        }
+        return false;
+    }
+    bool set_blue_1() {
+        if (blue_status != BlueCharge::Phase) {
+            blue_status = BlueCharge::Phase;
+            return true;
+        }
+        return false;
+    }
+    bool set_blue_2() {
+        if (blue_status != BlueCharge::Twilight) {
+            blue_status = BlueCharge::Twilight;
+            return true;
+        }
+        return false;
+    }
+    bool set_blue_3() {
+        if (blue_status != BlueCharge::EyesOfWisdom) {
+            blue_status = BlueCharge::EyesOfWisdom;
+            return true;
+        }
+        return false;
+    }
 
-    bool charge_purple_1() {
-        if (purple_status == PurpleCharge::None) {
-            purple_status = PurpleCharge::NineRopes;
-            return true;
-        }
-        return false;
-    }
-    bool charge_purple_2() {
-        if (purple_status == PurpleCharge::NineRopes) {
-            purple_status = PurpleCharge::PolarisedLight;
-            return true;
-        }
-        return false;
-    }
-    bool charge_purple_3() {
-        if (purple_status == PurpleCharge::PolarisedLight) {
-            purple_status = PurpleCharge::CrowandShomyo;
-            return true;
-        }
-        return false;
-    }
-    bool charge_purple_4() {
-        if (purple_status == PurpleCharge::CrowandShomyo) {
-            purple_status = PurpleCharge::TheGapBetween;
-            return true;
-        }
-        return false;
-    }
 
     bool set_purple_0() {
         if (purple_status != PurpleCharge::None) {
@@ -715,37 +811,124 @@ public:
         return false;
     }
 
-    int P_chantometer = 3;
-    int P_chantimeter = 0;
-    int P_prevmeter = P_chantimeter;
-    
-    int B_chantometer = 3;
-    int B_chantimeter = 0;
-    int B_prevmeter = P_chantimeter;
+    bool composure_check(double com) {
+        static std::random_device rd;
+        static std::mt19937 gen(rd());
 
-    int R_chantometer = 3;
+        double p = com / 100.0;
+        if (p < 0.0) p = 0.0;
+        if (p > 1.0) p = 1.0;
+
+        std::bernoulli_distribution dist(p);
+        return dist(gen);
+    }
+
+
+    int P_chantometer = 2;
+    int P_chantimeter = 0;
+    
+    int B_chantometer = 2;
+    int B_chantimeter = 0;
+
+    int R_chantometer = 2;
     int R_chantimeter = 0;
-    int R_prevmeter = R_chantimeter;
 
     void decrease_blue_chant() {
+        if (B_chantimeter <= 0) return;
+        if (prev_b_status == blue_status || B_chantimeter == 3) B_chantometer--;
 
+        if (B_chantometer <= 0) {
+            switch (B_chantimeter) {
+            case 0:
+                set_blue_0();
+                std::cout << "'Phase' has worn off on Blue. It wont have the same output unless you redo your Chant!\n";
+                break;
+            case 1:
+                set_blue_1();
+                std::cout << "'Twilight' has worn off on Blue. It wont have the same output unless you redo your Chant!\n";
+                break;
+            case 2:
+                set_blue_2();
+                std::cout << "'Eyes of Wisdom' has worn off on Blue. It wont have the same output unless you redo your Chant!\n";
+                break;
+            }
+            B_chantometer = 2;
+        }
+        prev_b_status = blue_status;
     }
 
     void blue_chant() {
+        if (B_chantimeter == 3) {
+            std::cout << "Your Blue is already fully chanted. You cant increase its output any further\n";
+            return;
+        }
+        if (B_chantimeter < 3) B_chantimeter++;
 
+        switch (B_chantimeter) {
+        case 1:
+            std::cout << "You chant: 'Phase' to increase the output of your Blue!\n";
+            set_blue_1();
+            break;
+        case 2:
+            std::cout << "You chant: 'Twiligh' to increase the output of your Blue!\n";
+            set_blue_2();
+            break;
+        case 3:
+            std::cout << "You chant: 'Eyes of wisdom' your Blue reaches it's Maximum Output!\n";
+            set_blue_3();
+            break;
+        }
     }
 
     void decrease_red_chants() {
-
+        if (R_chantimeter <= 0) return;
+        if (prev_r_status == red_status || R_chantimeter == 3) R_chantometer--;
+        
+        switch (R_chantimeter) {
+        case 0:
+            set_red_0();
+            std::cout << "'Phase' has worn off on Red. Unless you redo your chant, it wont have the same output\n";
+            break;
+        case 1:
+            set_red_1();
+            std::cout << "'Paramita' has worn off on Red. Unless you redo your chant, it wont have the same output\n";
+            break;
+        case 2:
+            set_red_2();
+            std::cout << "'Pillars of Light' has worn off on Red. Unless you redo your chant, it wont have the same output\n";
+            break;
+        }
+        prev_r_status = red_status;
     }
 
     void red_chant() {
+        if (R_chantimeter == 3) {
+            std::cout << "Your Red is already fully chanted. You cant increase its output any further\n";
+            return;
+        }
+        if (R_chantimeter < 3) R_chantimeter++;
 
+        switch (R_chantimeter) {
+        case 1:
+            std::cout << "You chant: 'Phase' to increase the output of your Red!\n";
+            set_red_1();
+            break;
+        case 2:
+            std::cout << "You chant: 'Paramita' to increase the output of your Red!\n";
+            set_red_2();
+            break;
+        case 3:
+            std::cout << "You chant: 'Pillars of Light' and your Red reaches it's Maximum Output!\n";
+            set_red_3();
+            break;
+        }
     }
 
 
     void decrease_purple_chants() {
-        if (P_prevmeter == P_chantimeter || P_chantimeter == 4) P_chantometer--;
+        if (P_chantimeter <= 0) return;
+
+        if (prev_p_status == purple_status || P_chantimeter == 4) P_chantometer--;
         
         if (P_chantometer <= 0) {
             switch (P_chantimeter) {
@@ -767,14 +950,19 @@ public:
                 std::cout << "Your chants cant keep their strength anymore, you will need to chant: 'The gap between Within and Without' again.\n";
                 break;
             }
-            P_chantometer = 3;
+            P_chantometer = 2;
         }
-        else if (P_chantometer < 3 && P_chantometer > 0) {
+        else if (P_chantometer < 2 && P_chantometer > 0) {
             std::cout << "Your chants are slowly wearing off, you better use Purple soon!\n";
         }
+        prev_p_status = purple_status;
     }
 
     void purple_chant() {
+        if (P_chantimeter == 4) {
+            std::cout << "Your Purple is already fully chanted. You cant increase its output any further\n";
+            return;
+        }
         if (P_chantimeter < 4) P_chantimeter++;
         
 
@@ -797,7 +985,30 @@ public:
         }
     }
 
+    bool is_using_cursed_techniques()const { // use for sukuna
+        return current_ct == CurrentCursedTechnique::Blue || 
+               current_ct == CurrentCursedTechnique::Red  || 
+               current_ct == CurrentCursedTechnique::Purple;
+    }
 
+    void PurpleUsed() {
+        P_chantimeter = 0;
+        P_chantometer = 2;
+        P_CE_needed = 0;
+        purple_status = PurpleCharge::None;
+    }
+    void RedUsed() {
+        R_chantimeter = 0;
+        R_chantometer = 2;
+        R_CE_needed = 0;
+        red_status = RedCharge::None;
+    }
+    void BlueUsed() {
+        B_chantimeter = 0;
+        B_chantometer = 2;
+        B_CE_needed = 0;
+        blue_status = BlueCharge::None;
+    }
 
     void Activate_Domain(Mahoraga& m, Sukuna& s);
     void Damage_to_composure(Gojo& g, int damage);
@@ -835,8 +1046,7 @@ public:
             std::cout << "Current composure: " << composure << '\n';
         }
         else if (composure <= 40.0) {
-            int chn = rand() % 2 + 1;
-            
+            int chn = getrandint(1, 2);
             if (chn == 1) {
                 std::cout << "Your focus bleeds away with each exchange.\n";
             }
@@ -846,7 +1056,7 @@ public:
             std::cout << "Current composure: " << composure << '\n';
         }
         else if (composure <= 95.0){
-            int ch = rand() % 2 + 1;
+            int ch = getrandint(1, 2);
             if (ch == 1) {
                 std::cout << "The fight stretches your focus.\n";
             }
@@ -878,6 +1088,14 @@ public:
             DeactivateRCT();
         }
     }
+    void passive_CE_regen() {
+        if (cursed_energy >= max_cursed_energy) {
+            return;
+        }
+        else {
+            cursed_energy += 25.0;
+        }
+    }
 
     void RCT_Usage() {
         if (cursed_energy < 10.0) {
@@ -889,6 +1107,8 @@ public:
             std::cout << "You dont have enough CT for Max Output anymore but you will still use RCT.\n";
             UseRCT();
         }
+        
+
 
         if (is_using_rct()) {
             cursed_energy -= 10.0;
@@ -902,9 +1122,10 @@ public:
             std::cout << "You arent using RCT currently.\n";
         }
 
-        if (health >= maxhealth && rct_active()) {
+        if (health > maxhealth && rct_active()) {
             std::cout << "You look brand new, maybe you should consider turning rct off for a while\n";
             std::cout << "so you dont waste cursed energy.\n";
+            health = maxhealth;
         }
         else if (health < 900.0 && not_using_rct()) {
             std::cout << "Despite the current damage you have taken, you havent been using RCT at all.\n";
@@ -913,6 +1134,9 @@ public:
 
     void Choose_technique(int choice) {
         switch (choice) {
+        case 0:
+            current_ct = CurrentCursedTechnique::None;
+            break;
         case 1:
             current_ct = CurrentCursedTechnique::Blue;
             break;
@@ -936,8 +1160,6 @@ int main() { ///////////////////////////////////////////////////////////////////
     Gojo g;
     Air a;
     
-    srand(time(0));
-    
 
     std::cout << "The person standing in front of you is Sukuna. Challenge him?\n (1-yes, 2-no): ";
     int start; std::cin >> start;
@@ -959,8 +1181,14 @@ int main() { ///////////////////////////////////////////////////////////////////
         else if (g.using_red()) std::cout << "Current Technique: Red\n";
         else if (g.using_purple()) std::cout << "Current Technique: Purple\n";
         else std::cout << "Current Technique: None\n";
-        std::cout << "------------------------------------------------\n\n";
+        std::cout << "------------------------------------------------\n";
         
+
+        std::cout << "Turn amount: " << GameMaster::turn_amount;
+
+        std::cout << "\n\n<=========== YOUR TURN ===============>\n";
+        std::cout << '\n';
+
         if (!g.burnt_out()) {
             std::cout << "1-Hand to hand, 2-Technique, 3-RCT, 4-Mahoraga status, 5-Sukuna status, 6-Chants\n";
             std::cout << "=> ";
@@ -985,10 +1213,10 @@ int main() { ///////////////////////////////////////////////////////////////////
                 continue;
             }
 
-            std::cout << "Choose a cursed technique:\n1-Blue, 2-Red, 3-Purple\n"; 
+            std::cout << "Choose a cursed technique:\n0-None, 1-Blue, 2-Red, 3-Purple\n"; 
             std::cout << "=> ";
             std::cin >> ct_choice;
-            if (ct_choice != 3) {
+            if (ct_choice < 3 && ct_choice > 0) {
                 std::cout << "Do you want to fire your Technique into the sky to setup an Unlimited Hollow Purple: \n";
                 std::cout << "1-yes, 2-no (be aware that sukuna will notice and take account of this)\n";
                 std::cin >> f_choice;
@@ -1015,8 +1243,12 @@ int main() { ///////////////////////////////////////////////////////////////////
                     g.Choose_technique(ct_choice);
                     GameMaster::increment_turn();
                     break;
-                default:
+                case 0:
                     g.Choose_technique(0);
+                    std::cout << "You stopped using your technique!\n";
+                    continue;
+                default:
+                    std::cout << "Invalid Input\n";
                     continue;
                 }
                 break;
@@ -1048,12 +1280,17 @@ int main() { ///////////////////////////////////////////////////////////////////
             int chox; std::cin >> chox;
             switch (chox) {
             case 1:
+                g.blue_chant();
+                GameMaster::increment_turn();
+                break;
             case 2:
+                g.red_chant();
+                GameMaster::increment_turn();
+                break;
             case 3:
                 g.purple_chant();
                 GameMaster::increment_turn();
                 break;
-                
             default:
                 std::cout << "Input Unrecognized\n";
                 continue;
@@ -1063,17 +1300,15 @@ int main() { ///////////////////////////////////////////////////////////////////
             std::cout << "Input Unrecognized\n";
             continue;
         }
-
-        std::cout << "Turn amount: " << GameMaster::turn_amount;
-
-        std::cout << "\n<=========== YOUR TURN ===============>\n";
-        std::cout << '\n';
         
         if(g.using_purple()) g.Purple(m, a ,s);
         g.Use_technique(m, s);
         g.RCT_Usage();
         g.Composure();
         g.decrease_purple_chants();
+        g.decrease_red_chants();
+        g.decrease_blue_chant();
+        g.passive_CE_regen();
 
         std::cout << "\n<=========== SUKUNA'S TURN ============>\n";
         std::cout << '\n';
@@ -1083,6 +1318,7 @@ int main() { ///////////////////////////////////////////////////////////////////
         s.sukuna_turn(g, m);
         s.paralyzed();
         s.pet_mahoraga(m);
+        s.passive_CE_regen();
 
 
         if (g.health <= 0 || s.health <= 0) fighting = false;
@@ -1117,46 +1353,78 @@ void Gojo::Use_hands(Sukuna& s, Mahoraga& m) {
         std::cout << "\nSukuna is not in striking distance, you can use your technique to pull him in\n\n";
         return;
     }
-    double raw_strength = 2.5;
-    int chance = rand() % 100 + 1;
-
-
+    const double raw_strength = 2.5;
+    int chance = getrandint(1, 100);
+    std::cout << "\n\n";
     if ((chance == 100 || chance == 1) && composure >= 95.0) {
-        if (chance == 100) s.sukuna_attacked_fists(m, *this, raw_strength * chance);
-        else if (chance == 1) s.sukuna_attacked_fists(m, *this, raw_strength * (chance + 99));
+        s.sukuna_attacked_fists(m, *this, raw_strength * 100);
         std::cout << "----------!!!!BLACK FLASH!!!!-----------\n";
     }
     else if (chance >= 85 && composure >= 70.0) { ///////////////////////////////////////////////////////// UNFINISHED
+        std::cout << "You focus and try to land a hit\n";
 
     }
     else if (chance >= 50) {
-
+        std::cout << "more than or equal to 50\n";
     }
-    else if (chance <= 50 && composure >= 40.0) {
-
-    }
-    else if (chance <= 15 && composure <= 20.0) {
-
+    else if (chance <= 50 && composure <= 40.0) {
+        std::cout << "less comp, less or equal to 50\n";
     }
     else if (chance <= 50) {
-
+        std::cout << "less or equal to 50\n";
     }
 
 
 }
 void Sukuna::sukuna_attacked_fists(Mahoraga& m, Gojo& g, double damage) {
+    int missdifier = getrandint(1, 100);
+
+    if (SukunaInShadows()) {
+        std::cout << "Sukuna is in the shadows, you cant go hand to hand with him\n";
+        return;
+    }
     if (m.is_active()) {
         std::cout << "Mahoraga is active, he will take your punch.\n";
-        std::cout << "Mahoraga took " << damage * 0.2 << " Damage!\n";
-        m.take_Damage(damage * 0.2);
+
+        if (damage >= 200.0) { // dont kill mahoraga in 1 hit
+            std::cout << "Mahoraga took " << damage * 0.3 << " damage!\n";
+            m.take_Damage(damage * 0.3);
+        }
+        else {
+            std::cout << "Mahoraga took " << damage * 0.7 << " damage!\n";
+            m.take_Damage(damage * 0.7);
+        }
     }
-    else if (domain_amplification) {
-        std::cout << "You hit Sukuna, he took: " << damage * 0.4 << " Damage.\n";
-        take_Damage(damage * 0.4);
+    else if (stunned) {
+        std::cout << "You hit Sukuna while he's unconcious!\n";
+        take_Damage(damage);
+    }
+    else if(damage >= 200.0){ 
+        std::cout << "You hit Sukuna so hard he got knocked out!!!\n";
+        stunned = true;
+        take_Damage(damage);
     }
     else {
-        std::cout << "You hit Sukuna with the full force of your punch!\n";
-        std::cout << "he took " << damage << " Damage!\n";
+        if (missdifier > 30 && g.composure >= 30.0) {
+            if (SukunaDefending()) {
+                std::cout << "You hit Sukuna with the full force of your punch!\n";
+                std::cout << "Sukuna reinforced some of the oncoming damage!\n";
+                std::cout << "He took " << damage * 0.4 << " damage!\n";
+                take_Damage(damage * 0.4);
+            }
+            else {
+                std::cout << "You hit Sukuna with the full force of your punch!\n";
+                std::cout << "Sukuna couldnt defend in time and got hit with your punch\n";
+                std::cout << "He took " << damage * 0.6 << " damage!\n";
+                take_Damage(damage * 0.6);
+            }
+        }
+        else if (g.composure < 30.0){
+            std::cout << "You missed your punch! you cant keep your head clear.\n";
+        }
+        else {
+            std::cout << "You missed. You were off by a few inches";
+        }
     }
 }
 
@@ -1189,12 +1457,24 @@ void Gojo::Use_technique(Mahoraga& m, Sukuna& s) { // 1-blue 2-red 3-purple
     const double purple_base = 100.0;
 
     int chooser;
-    int markiplier = rand() % 10 + 1; // close
-    int smallmultiplier = rand() % 3 + 1; // far away
-    int bigmultiplier = rand() % 10 + 11; // strong attack
+    int midmultiplier = getrandint(3, 10); // close
+    int smallmultiplier = getrandint(1, 3); // far away
+    int bigmultiplier = getrandint(10, 20); // strong attack
+    int attack_chance = getrandint(1, composure);
+
+    if (attack_chance < 20)
+
 
     switch (current_ct) {
-    case CurrentCursedTechnique::Blue:
+    case CurrentCursedTechnique::Blue: {
+        int bluecharge = static_cast<int>(blue_status);
+
+        if (cursed_energy < blue_ce_limit[bluecharge]) {
+            std::cout << "You dont have enough cursed energy to activate Blue.\n";
+            std::cout << "You need " << blue_ce_limit[bluecharge] - cursed_energy << " more Cursed Energy!\n";
+            return;
+        }
+
         if (s.SukunaInShadows()) {
             std::cout << "Sukuna is in the shadow's currently, you cant use your technique on him\n";
             std::cout << "hold out as long as you can until he gets out of the shadows.\n";
@@ -1208,6 +1488,7 @@ void Gojo::Use_technique(Mahoraga& m, Sukuna& s) { // 1-blue 2-red 3-purple
                 if (s.SukunaOffense()) {
                     s.get_close_offensively();
                     std::cout << "You pulled Sukuna close, he is on offense, he will try to attack as much as possible.\n";
+
                 }
                 else if (s.SukunaDefending()) {
                     s.get_close_defensively();
@@ -1235,14 +1516,25 @@ void Gojo::Use_technique(Mahoraga& m, Sukuna& s) { // 1-blue 2-red 3-purple
                 }
             }
             else {
-                std::cout << "You hit Sukuna with a " << blue_base * markiplier << " damage Blue!\n";
-                s.sukuna_attacked(m, *this, blue_base * markiplier);
+                std::cout << "You hit Sukuna with a " << blue_base * midmultiplier << " damage Blue!\n";
+                s.sukuna_attacked(m, *this, blue_base * midmultiplier);
             }
         }
-
+        take_CE(blue_ce_limit[bluecharge]);
         break;
-    case CurrentCursedTechnique::Red:
+    }
+    case CurrentCursedTechnique::Red: {
+        int redcharge = static_cast<int>(red_status);
+        double Rdamage = red_base * red_multiplier[redcharge];
+
+        if (cursed_energy < red_ce_limit[redcharge]) {
+            std::cout << "You dont have enough cursed energy left to activate Red!\n";
+            std::cout << "You need " << red_ce_limit[redcharge] - cursed_energy << " more cursed energy";
+            return;
+        }
+
         if (s.SukunaCloseBy()) {
+
             std::cout << "Sukuna is in striking distance\n Blow him away with red?\n";
             std::cout << "1-yes, 2-no\n";
             std::cout << "=> ";
@@ -1258,39 +1550,40 @@ void Gojo::Use_technique(Mahoraga& m, Sukuna& s) { // 1-blue 2-red 3-purple
                 }
             }
             else {
-                std::cout << "You hit Sukuna with a " << red_base * markiplier << " damage Red.\n";
-                s.sukuna_attacked(m, *this, red_base * markiplier);
+                std::cout << "You hit Sukuna with a " << Rdamage * smallmultiplier << " damage Red.\n";
+                s.sukuna_attacked(m, *this, Rdamage * smallmultiplier);
             }
         }
         else {
             std::cout << "You fire off a Red at Sukuna\n";
-            std::cout << "You hit Sukuna with a " << red_base * smallmultiplier << " damage Red!\n";
-            s.sukuna_attacked(m, *this, red_base * smallmultiplier);
+            std::cout << "You hit Sukuna with a " << Rdamage << " damage Red!\n";
+            s.sukuna_attacked(m, *this, Rdamage);
         }
+        take_CE(red_ce_limit[redcharge]);
+        std::cout << red_ce_limit[redcharge] << " amount of cursed energy was used.\n";
         break;
-    case CurrentCursedTechnique::Purple:
-        switch (purple_status) {
-        case PurpleCharge::None:
-            s.sukuna_attacked(m, *this, purple_base);
-            std::cout << "\nYou hit Sukuna with a " << purple_base << " damage purple.\n";
-            break;
-        case PurpleCharge::NineRopes:
-            s.sukuna_attacked(m, *this, purple_base * 2.0);
-            std::cout << "\nYou hit Sukuna with a " << purple_base * 2.0 << " damage purple.\n";
-            break;
-        case PurpleCharge::PolarisedLight:
-            s.sukuna_attacked(m, *this, purple_base * 3.5);
-            std::cout << "\nYou hit Sukuna with a " << purple_base * 3.5 << " damage purple.\n";
-            break;
-        case PurpleCharge::CrowandShomyo:
-            s.sukuna_attacked(m, *this, purple_base * 5.0);
-            std::cout << "\nYou hit Sukuna with a " << purple_base * 5.0 << " damage purple.\n";
-            break;
-        case PurpleCharge::TheGapBetween:
-            s.sukuna_attacked(m, *this, purple_base * 7.5);
-            std::cout << "\nYou hit Sukuna with a " << purple_base * 7.5 << " damage purple.\n";
-            break;
+    }
+    case CurrentCursedTechnique::Purple: {
+        int purplecharge = static_cast<int>(purple_status);
+        double Pdamage = purple_base * purple_multiplier[purplecharge];
+
+        if (cursed_energy < purple_ce_limit[purplecharge]) {
+            std::cout << "You dont have enough cursed energy to pull off Purple\n";
+            std::cout << "You need " << purple_ce_limit[purplecharge] - cursed_energy << " more Cursed Energy!\n";
+            return;
         }
+
+        s.sukuna_attacked(m, *this, Pdamage);
+        std::cout << "You hit Sukuna with a " << Pdamage << " damage Purple!\n";
+
+        take_CE(purple_ce_limit[purplecharge]);
+        std::cout << "Consumed CE Amount: " << purple_ce_limit[purplecharge] << '\n';
+
+        PurpleUsed();
+        break;
+    }
+    case CurrentCursedTechnique::None:
+        std::cout << "You arent using any of the Limitless aside from Infinity currently\n";
         break;
     }
 }
@@ -1448,16 +1741,9 @@ void Sukuna::sukuna_attacked(Mahoraga& m, Gojo& g, double damage) {
         return;
     }
     else { // mahoraga not active
-        if (domain_amplification) {
-            std::cout << "Sukuna brushed off your attack with domain amplification!\n";
-            take_Damage(damage * 0.60);
-            std::cout << "Damage taken by Sukuna: " << damage * 0.60 << "\n";
-        }
-        else { // no domain amp
-            std::cout << "Sukuna took all the brunt of your attack!\n";
-            take_Damage(damage);
-            std::cout << "Damage taken by Sukuna: " << damage << "\n";
-        }
+        std::cout << "Sukuna took all the brunt of your attack!\n";
+        take_Damage(damage);
+        std::cout << "Damage taken by Sukuna: " << damage << "\n";
     }
 }
 
@@ -1481,9 +1767,12 @@ void Sukuna::set_sukuna_mental_status() {
 
 void Sukuna::sukuna_turn(Gojo& g, Mahoraga& m) {
     if (health <= 0.0) return; 
-    if (stunned) return;
+    if (stunned) {
+        std::cout << "Sukuna is knocked out, his turn is forfeit\n";
+        return;
+    }
 
-    int decider = rand() % 20 + 1;
+    int decider = getrandint(1, 20);
 
     if (health <= 200.0) {
 
@@ -1563,3 +1852,10 @@ void Gojo::Purple(Mahoraga& m, Air& a, Sukuna& s) {
         std::cout << "You send out an unchanted hollow purple\n";
     }
 }
+
+int getrandint(int min, int max) {
+    static std::mt19937 gen(std::random_device{}());
+    std::uniform_int_distribution<int> dist(min, max);
+    return dist(gen);
+}
+
