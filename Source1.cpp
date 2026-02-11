@@ -1491,7 +1491,7 @@ void Gojo::Use_technique(Mahoraga& m, Sukuna& s) { // 1-blue 2-red 3-purple
         int bluecharge = static_cast<int>(blue_status);
         double Bdamage = blue_base * blue_multiplier[bluecharge];
              
-        if (cursed_energy < blue_multiplier[bluecharge]) {
+        if (cursed_energy < blue_ce_limit[bluecharge]) {
             std::cout << "-> You dont have enough cursed energy to activate Blue.\n";
             std::cout << "-> You need " << blue_ce_limit[bluecharge] - cursed_energy << " more Cursed Energy!\n";
             return;
