@@ -868,15 +868,15 @@ public:
             switch (B_chantimeter) {
             case 0:
                 set_blue_0();
-                std::cout << "'Phase' has worn off on Blue. It wont have the same output unless you redo your Chant!\n";
+                std::cout << "-> 'Phase' has worn off on Blue. It wont have the same output unless you redo your Chant!\n";
                 break;
             case 1:
                 set_blue_1();
-                std::cout << "'Twilight' has worn off on Blue. It wont have the same output unless you redo your Chant!\n";
+                std::cout << "*-> 'Twilight' has worn off on Blue. It wont have the same output unless you redo your Chant!\n";
                 break;
             case 2:
                 set_blue_2();
-                std::cout << "'Eyes of Wisdom' has worn off on Blue. It wont have the same output unless you redo your Chant!\n";
+                std::cout << "**-> 'Eyes of Wisdom' has worn off on Blue. It wont have the same output unless you redo your Chant!\n";
                 break;
             }
             B_chantometer = 2;
@@ -886,22 +886,22 @@ public:
 
     void blue_chant() {
         if (B_chantimeter == 3) {
-            std::cout << "Your Blue is already fully chanted. You cant increase its output any further\n";
+            std::cout << "***=> Your Blue is already fully chanted. You cant increase its output any further\n";
             return;
         }
         if (B_chantimeter < 3) B_chantimeter++;
 
         switch (B_chantimeter) {
         case 1:
-            std::cout << "You chant: 'Phase' to increase the output of your Blue!\n";
+            std::cout << "*=> You chant: 'Phase' to increase the output of your Blue!\n";
             set_blue_1();
             break;
         case 2:
-            std::cout << "You chant: 'Twiligh' to increase the output of your Blue!\n";
+            std::cout << "**=> You chant: 'Twiligh' to increase the output of your Blue!\n";
             set_blue_2();
             break;
         case 3:
-            std::cout << "You chant: 'Eyes of wisdom' your Blue reaches it's Maximum Output!\n";
+            std::cout << "***=> You chant: 'Eyes of wisdom' your Blue reaches it's Maximum Output!\n";
             set_blue_3();
             break;
         }
@@ -914,15 +914,15 @@ public:
         switch (R_chantimeter) {
         case 0:
             set_red_0();
-            std::cout << "'Phase' has worn off on Red. Unless you redo your chant, it wont have the same output\n";
+            std::cout << "-> 'Phase' has worn off on Red. Unless you redo your chant, it wont have the same output\n";
             break;
         case 1:
             set_red_1();
-            std::cout << "'Paramita' has worn off on Red. Unless you redo your chant, it wont have the same output\n";
+            std::cout << "*-> 'Paramita' has worn off on Red. Unless you redo your chant, it wont have the same output\n";
             break;
         case 2:
             set_red_2();
-            std::cout << "'Pillars of Light' has worn off on Red. Unless you redo your chant, it wont have the same output\n";
+            std::cout << "**-> 'Pillars of Light' has worn off on Red. Unless you redo your chant, it wont have the same output\n";
             break;
         }
         prev_r_status = red_status;
@@ -930,22 +930,22 @@ public:
 
     void red_chant() {
         if (R_chantimeter == 3) {
-            std::cout << "Your Red is already fully chanted. You cant increase its output any further\n";
+            std::cout << "***=> Your Red is already fully chanted. You cant increase its output any further\n";
             return;
         }
         if (R_chantimeter < 3) R_chantimeter++;
 
         switch (R_chantimeter) {
         case 1:
-            std::cout << "You chant: 'Phase' to increase the output of your Red!\n";
+            std::cout << "*=> You chant: 'Phase' to increase the output of your Red!\n";
             set_red_1();
             break;
         case 2:
-            std::cout << "You chant: 'Paramita' to increase the output of your Red!\n";
+            std::cout << "**=> You chant: 'Paramita' to increase the output of your Red!\n";
             set_red_2();
             break;
         case 3:
-            std::cout << "You chant: 'Pillars of Light' and your Red reaches it's Maximum Output!\n";
+            std::cout << "***=> You chant: 'Pillars of Light' and your Red reaches it's Maximum Output!\n";
             set_red_3();
             break;
         }
@@ -960,34 +960,34 @@ public:
         if (P_chantometer <= 0) {
             switch (P_chantimeter) {
             case 1:
-                std::cout << "Your chants cant keep their strength anymore, you will need to chant: 'Nine Ropes' again.\n";
-                std::cout << "Your chants have worn off, Purple will be at its weakest\n";
                 set_purple_0();
+                std::cout << "-> Your chants cant keep their strength anymore, you will need to chant: 'Nine Ropes' again.\n";
+                std::cout << "-> Your chants have worn off, Purple will be at its weakest\n";
                 break;
             case 2:
                 set_purple_1();
-                std::cout << "Your chants cant keep their strength anymore, you will need to chant: 'Polarised Light' again.\n";
+                std::cout << "*-> Your chants cant keep their strength anymore, you will need to chant: 'Polarised Light' again.\n";
                 break;
             case 3:
                 set_purple_2();
-                std::cout << "Your chants cant keep their strength anymore, you will need to chant: 'Crow and Shomyo' again.\n";
+                std::cout << "**-> Your chants cant keep their strength anymore, you will need to chant: 'Crow and Shomyo' again.\n";
                 break;
             case 4:
                 set_purple_3();
-                std::cout << "Your chants cant keep their strength anymore, you will need to chant: 'The gap between Within and Without' again.\n";
+                std::cout << "***-> Your chants cant keep their strength anymore, you will need to chant: 'The gap between Within and Without' again.\n";
                 break;
             }
             P_chantometer = 2;
         }
         else if (P_chantometer < 2 && P_chantometer > 0) {
-            std::cout << "Your chants are slowly wearing off, you better use Purple soon!\n";
+            std::cout << "*-> Your chants are slowly wearing off, you better use Purple soon!\n";
         }
         prev_p_status = purple_status;
     }
 
     void purple_chant() {
         if (P_chantimeter == 4) {
-            std::cout << "Your Purple is already fully chanted. You cant increase its output any further\n";
+            std::cout << "****=> Your Purple is already fully chanted. You cant increase its output any further\n";
             return;
         }
         if (P_chantimeter < 4) P_chantimeter++;
@@ -996,19 +996,19 @@ public:
         switch (P_chantimeter) {
         case 1:
             set_purple_1();
-            std::cout << "You chant: 'Nine Ropes!' Your hollow purple increases in strength!\n";
+            std::cout << "*=> You chant: 'Nine Ropes!' Your hollow purple increases in strength!\n";
             break;
         case 2:
             set_purple_2();
-            std::cout << "You chant: 'Polarised Light!' Your hollow purple increases in strength!\n";
+            std::cout << "**=> You chant: 'Polarised Light!' Your hollow purple increases in strength!\n";
             break;
         case 3:
             set_purple_3();
-            std::cout << "You chant: 'Crow and Shomyo' Your hollow purple increases in strength!\n";
+            std::cout << "***=> You chant: 'Crow and Shomyo' Your hollow purple increases in strength!\n";
             break;
         case 4:
             set_purple_4();
-            std::cout << "You chant: 'The gap between Within and Without!' Your hollow purple increases in strength to its maximum potential!\n";
+            std::cout << "****=> You chant: 'The gap between Within and Without!' Your hollow purple increases in strength to its maximum potential!\n";
         }
     }
 
@@ -1063,34 +1063,34 @@ public:
         if (composure < 0.0) composure = 0.0;
         
         if (composure == 0.0) {
-            std::cout << "You’re fighting on instinct alone now.\n";// player needs to get their composure up
+            std::cout << "-> You’re fighting on instinct alone now.\n";// player needs to get their composure up
         }
         else if (composure <= 15.0) {
-            std::cout << "Keeping control is becoming a conscious effort.\n";
-            std::cout << "Current composure: " << composure << '\n';
+            std::cout << "-> Keeping control is becoming a conscious effort.\n";
+            std::cout << "-> Current composure: " << composure << '\n';
         }
         else if (composure <= 40.0) {
             int chn = getrandint(1, 2);
             if (chn == 1) {
-                std::cout << "Your focus bleeds away with each exchange.\n";
+                std::cout << "-> Your focus bleeds away with each exchange.\n";
             }
             else {
-                std::cout << "Sustaining this pace costs more than it gives.\n";
+                std::cout << "-> Sustaining this pace costs more than it gives.\n";
             }
-            std::cout << "Current composure: " << composure << '\n';
+            std::cout << "-> Current composure: " << composure << '\n';
         }
         else if (composure <= 95.0){
             int ch = getrandint(1, 2);
             if (ch == 1) {
-                std::cout << "The fight stretches your focus.\n";
+                std::cout << "-> The fight stretches your focus.\n";
             }
             else {
-                std::cout << "The clash continues, concentration fraying.\n";
+                std::cout << "-> The clash continues, concentration fraying.\n";
             }
-            std::cout << "Current composure: " << composure << '\n';
+            std::cout << "-> Current composure: " << composure << '\n';
         }
         else {
-            std::cout << "You feel like you can fight non-stop for days on end.\n";
+            std::cout << "-> You feel like you can fight non-stop for days on end.\n";
         }
     }
     void take_CE(double Amount) {
@@ -1123,12 +1123,12 @@ public:
 
     void RCT_Usage() {
         if (cursed_energy < 10.0) {
-            std::cout << "You dont have enough CT to use RCT anymore.\n";
+            std::cout << "-> You dont have enough CT to use RCT anymore.\n";
             DeactivateRCT();
             return;
         }
         else if (cursed_energy < 50.0) {
-            std::cout << "You dont have enough CT for Max Output anymore but you will still use RCT.\n";
+            std::cout << "-> You dont have enough CT for Max Output anymore but you will still use RCT.\n";
             UseRCT();
         }
         
@@ -1143,16 +1143,15 @@ public:
             health += 150.0;
         }
         else {
-            std::cout << "You arent using RCT currently.\n";
+            std::cout << "-> You arent using RCT currently.\n";
         }
 
         if (health > maxhealth && rct_active()) {
-            std::cout << "You look brand new, maybe you should consider turning rct off for a while\n";
-            std::cout << "so you dont waste cursed energy.\n";
+            std::cout << "-> RCT is repeatedly using Cursed Energy, consider turning it off for a while\n";
             health = maxhealth;
         }
         else if (health < 900.0 && not_using_rct()) {
-            std::cout << "Despite the current damage you have taken, you havent been using RCT at all.\n";
+            std::cout << "-> Despite the current damage you have taken, you havent been using RCT at all.\n";
         }
     }
 
@@ -1185,9 +1184,9 @@ int main() { ///////////////////////////////////////////////////////////////////
     Air a;
     
 
-    std::cout << "The person standing in front of you is Sukuna. Challenge him?\n (1-yes, 2-no): ";
+    std::cout << "==> The person standing in front of you is Sukuna. Challenge him?\n->(1-yes, 2-no): ";
     int start; std::cin >> start;
-    if (start == 2) std::cout << "\nDid you really the king of curses would ignore your strength?\n\n";
+    if (start == 2) std::cout << "\n-> Did you really the king of curses would ignore your strength?\n\n";
 
     bool fighting = true;
     while (fighting) {
@@ -1208,17 +1207,17 @@ int main() { ///////////////////////////////////////////////////////////////////
         std::cout << "------------------------------------------------\n";
         
 
-        std::cout << "Turn amount: " << GameMaster::turn_amount;
+        std::cout << "== Turn amount: " << GameMaster::turn_amount << " ==";
 
         std::cout << "\n\n<=========== YOUR TURN ===============>\n";
         std::cout << '\n';
 
         if (!g.burnt_out()) {
-            std::cout << "1-Hand to hand, 2-Technique, 3-RCT, 4-Mahoraga status, 5-Sukuna status, 6-Chants\n";
+            std::cout << "-> 1-Hand to hand, 2-Technique, 3-RCT, 4-Mahoraga status, 5-Sukuna status, 6-Chants\n";
             std::cout << "=> ";
         }
         else {
-            std::cout << "1-Hand to hand (CT BURNT OUT) 3-RCT, 4-Mahoraga status, 5-Sukuna status\n";
+            std::cout << "-> 1-Hand to hand (CT BURNT OUT) 3-RCT, 4-Mahoraga status, 5-Sukuna status\n";
             std::cout << "=> ";
         }
 
@@ -1233,16 +1232,17 @@ int main() { ///////////////////////////////////////////////////////////////////
             break;
         case 2:
             if (g.burnt_out()) {
-                std::cerr << "You cant use your technique currently, you are burnt out\n";
+                std::cerr << "-> You cant use your technique currently, you are burnt out\n";
                 continue;
             }
 
-            std::cout << "Choose a cursed technique:\n0-None, 1-Blue, 2-Red, 3-Purple\n"; 
+            std::cout << "==> Choose a cursed technique:\n-> 0-None, 1-Blue, 2-Red, 3-Purple\n"; 
             std::cout << "=> ";
             std::cin >> ct_choice;
             if (ct_choice < 3 && ct_choice > 0) {
-                std::cout << "Do you want to fire your Technique into the sky to setup an Unlimited Hollow Purple: \n";
-                std::cout << "1-yes, 2-no (be aware that sukuna will notice and take account of this)\n";
+                std::cout << "==> Do you want to fire your Technique into the sky to setup an Unlimited Hollow Purple: \n";
+                std::cout << "-> 1-yes, 2-no\n";
+                std::cout << "=> ";
                 std::cin >> f_choice;
             }
             if (f_choice == 1) {
@@ -1269,17 +1269,17 @@ int main() { ///////////////////////////////////////////////////////////////////
                     break;
                 case 0:
                     g.Choose_technique(0);
-                    std::cout << "You stopped using your technique!\n";
+                    std::cout << "-> You stopped using your technique!\n";
                     continue;
                 default:
-                    std::cout << "Invalid Input\n";
+                    std::cout << "-> Invalid Input\n";
                     continue;
                 }
                 break;
             }
             break;
         case 3:
-            std::cout << "Choose the type of RCT you'd like to use\n (1-regular rct, 2-max output rct, 3-disabled)\n";
+            std::cout << "==> Choose the type of RCT you'd like to use\n-> (1-regular rct, 2-max output rct, 3-disabled)\n";
             std::cout << "=> ";
             int chiss; std::cin >> chiss;
             switch (chiss) {
@@ -1299,7 +1299,7 @@ int main() { ///////////////////////////////////////////////////////////////////
             s.sukuna_status();
             continue;
         case 6:
-            std::cout << "Choose a technique to boost with chants\n 1-Blue, 2-Red, 3-Purple\n";
+            std::cout << "==> Choose a technique to boost with chants\n-> 1-Blue, 2-Red, 3-Purple\n";
             std::cout << "=> ";
             int chox; std::cin >> chox;
             switch (chox) {
@@ -1316,12 +1316,12 @@ int main() { ///////////////////////////////////////////////////////////////////
                 GameMaster::increment_turn();
                 break;
             default:
-                std::cout << "Input Unrecognized\n";
+                std::cout << "-> Input Unrecognized\n";
                 continue;
             }
             break;
         default:
-            std::cout << "Input Unrecognized\n";
+            std::cout << "-> Input Unrecognized\n";
             continue;
         }
         
@@ -1345,9 +1345,9 @@ int main() { ///////////////////////////////////////////////////////////////////
         s.passive_CE_regen();
 
 
-        if (g.health <= 0 || s.health <= 0) fighting = false;
+        if (g.health <= 0 || s.health <= 0) break;
 
-        std::cout << "\nPress Enter...";
+        std::cout << "\n-> Press Enter...";
 
 
         std::cin.ignore(); std::cin.get();
@@ -1355,7 +1355,18 @@ int main() { ///////////////////////////////////////////////////////////////////
         for (int i = 0; i < 25; ++i)
             std::cout << "\n";
     }
-    std::cout << "The battle is over. You have defeated The King of Curses!\n";
+
+
+    if (g.health <= 0) {
+        std::cout << "===> You have been defeated by the king of curses, he atleast wont ever forget this fight. <===\n";
+    }
+    else {
+        std::cout << "***==> The battle is over. You have defeated The King of Curses! <==***\n";
+    }
+
+
+
+   
     return 0;
 } //////////////////////////////////////////////////////////////////////// MAIN MAIN MAIN MAIN MAIN END END END END END
 
@@ -1374,7 +1385,7 @@ void Mahoraga::mahoraga_adapting(Gojo& g, double damage) {
 
 void Gojo::Use_hands(Sukuna& s, Mahoraga& m) {
     if (s.SukunaFarAway()) {
-        std::cout << "\nSukuna is not in striking distance, you can use your technique to pull him in\n\n";
+        std::cout << "\n-> Sukuna is not in striking distance, you can use your technique to pull him in\n\n";
         return;
     }
     const double raw_strength = 2.5;
@@ -1383,20 +1394,20 @@ void Gojo::Use_hands(Sukuna& s, Mahoraga& m) {
     std::cout << "\n\n";
     if ((chance == 100 || chance == 1) && composure >= 95.0) {
         s.sukuna_attacked_fists(m, *this, raw_strength * 100);
-        std::cout << "----------!!!!BLACK FLASH!!!!-----------\n";
+        std::cout << "***----------!!!!BLACK FLASH!!!!-----------***\n";
     }
     else if (chance >= 85 && composure >= 70.0) { ///////////////////////////////////////////////////////// UNFINISHED
-        std::cout << "You focus and try to land a hit\n";
+        std::cout << "-> You focus and try to land a hit\n";
 
     }
     else if (chance >= 50) {
-        std::cout << "more than or equal to 50\n";
+        std::cout << "-> more than or equal to 50\n";
     }
     else if (chance <= 50 && composure <= 40.0) {
-        std::cout << "less comp, less or equal to 50\n";
+        std::cout << "-> less comp, less or equal to 50\n";
     }
     else if (chance <= 50) {
-        std::cout << "less or equal to 50\n";
+        std::cout << "-> less or equal to 50\n";
     }
 
 
@@ -1406,41 +1417,41 @@ void Sukuna::sukuna_attacked_fists(Mahoraga& m, Gojo& g, double damage) {
     int rein = static_cast<int>(reinforcement);
 
     if (SukunaInShadows()) {
-        std::cout << "Sukuna is in the shadows, you cant go hand to hand with him\n";
+        std::cout << "-> Sukuna is in the shadows, you cant go hand to hand with him\n";
         return;
     }
     if (m.is_active()) {
-        std::cout << "Mahoraga is active, he will take your punch.\n";
+        std::cout << "-> Mahoraga is active, he will take your punch.\n";
 
         if (damage >= 200.0) { // dont kill mahoraga in 1 hit
-            std::cout << "Mahoraga took " << damage * 0.3 << " damage!\n";
+            std::cout << "-> Mahoraga took " << damage * 0.3 << " damage!\n";
             m.take_Damage(damage * 0.3);
         }
         else {
-            std::cout << "Mahoraga took " << damage * 0.7 << " damage!\n";
+            std::cout << "-> Mahoraga took " << damage * 0.7 << " damage!\n";
             m.take_Damage(damage * 0.7);
         }
     }
     else if (stunned) {
-        std::cout << "You hit Sukuna while he's unconcious!\n";
+        std::cout << "-> You hit Sukuna while he's unconcious!\n";
         take_Damage(damage);
     }
     else if(damage >= 200.0){ 
-        std::cout << "You hit Sukuna so hard he got knocked out!!!\n";
+        std::cout << "-> You hit Sukuna so hard he got knocked out!!!\n";
         stunned = true;
         take_Damage(damage);
     }
     else {
         if (missdifier > 30 && g.composure >= 30.0) {
-            std::cout << "You hit Sukuna with the full force of your punch!\n";
-            std::cout << "He took " << damage * ReinforcementMult[rein] << " damage!\n";
+            std::cout << "-> You hit Sukuna with the full force of your punch!\n";
+            std::cout << "-> He took " << damage * ReinforcementMult[rein] << " damage!\n";
             take_Damage(damage * ReinforcementMult[rein]);
         }
         else if (g.composure < 30.0){
-            std::cout << "You missed your punch! you cant keep your head clear.\n";
+            std::cout << "-> You missed your punch! you cant keep your head clear.\n";
         }
         else {
-            std::cout << "You missed. You were off by a few inches";
+            std::cout << "-> You missed. You were off by a few inches";
         }
     }
 }
@@ -1449,20 +1460,20 @@ void Gojo::Fire_technique(Air& air, int ct) {
     switch (ct) {
     case 1:
         if (!air.BlueInSky()) {
-            std::cout << "You fired a Blue into the air!\n";
+            std::cout << "-> You sent off a Blue into the air!\n";
             air.FireBlue();
         }
         else {
-            std::cout << "You already have a Blue in the air, Focus on attacking sukuna instead.\n";
+            std::cout << "-> You already have a Blue in the air, Focus on attacking sukuna instead.\n";
         }
         break;
     case 2:
         if (!air.RedInSky()) {
-            std::cout << "You fired a Red into the air!\n";
+            std::cout << "-> You fired a Red into the air!\n";
             air.FireRed();
         }
         else {
-            std::cout << "You already have a Red in the air, Focus on attacking sukuna instead.\n";
+            std::cout << "-> You already have a Red in the air, Focus on attacking sukuna instead.\n";
         }
         break;
     }
@@ -1474,64 +1485,63 @@ void Gojo::Use_technique(Mahoraga& m, Sukuna& s) { // 1-blue 2-red 3-purple
     const double purple_base = 100.0;
 
     int chooser;
-    int midmultiplier = getrandint(3, 10); // close
-    int smallmultiplier = getrandint(1, 3); // far away
-    int bigmultiplier = getrandint(10, 20); // strong attack
 
     switch (current_ct) {
     case CurrentCursedTechnique::Blue: {
         int bluecharge = static_cast<int>(blue_status);
-        double Bdamage = blue_base * blue_ce_limit[bluecharge];
+        double Bdamage = blue_base * blue_multiplier[bluecharge];
              
-        if (cursed_energy < blue_ce_limit[bluecharge]) {
-            std::cout << "You dont have enough cursed energy to activate Blue.\n";
-            std::cout << "You need " << blue_ce_limit[bluecharge] - cursed_energy << " more Cursed Energy!\n";
+        if (cursed_energy < blue_multiplier[bluecharge]) {
+            std::cout << "-> You dont have enough cursed energy to activate Blue.\n";
+            std::cout << "-> You need " << blue_ce_limit[bluecharge] - cursed_energy << " more Cursed Energy!\n";
             return;
         }
 
         if (s.SukunaInShadows()) {
-            std::cout << "Sukuna is in the shadow's currently, you cant use your technique on him\n";
-            std::cout << "hold out as long as you can until he gets out of the shadows.\n";
+            std::cout << "-> Sukuna is in the shadow's currently, you cant use your technique on him\n";
+            std::cout << "-> hold out as long as you can until he gets out of the shadows.\n";
         }
         else if (s.SukunaFarAway()) {
-            std::cout << "Sukuna is currently far away\n";
-            std::cout << "Do you want to pull Sukuna in?\n 1-yes, 2-no: ";
+            std::cout << "-> Sukuna is currently far away\n";
+            std::cout << "==> Do you want to pull Sukuna in?\n 1-yes, 2-no: ";
+            std::cout << "=> ";
             std::cin >> chooser;
             std::cout << '\n';
             if (chooser == 1) {
                 if (s.SukunaOffense()) {
                     s.get_close_offensively();
-                    std::cout << "You pulled Sukuna close, he is on offense, he will try to attack as much as possible.\n";
+                    std::cout << "-> You pulled Sukuna close, he is on offense, he will try to attack as much as possible.\n";
 
                 }
                 else if (s.SukunaDefending()) {
                     s.get_close_defensively();
-                    std::cout << "You pulled Sukuna close, he is playing defensively, best to knock him off his feet.\n";
+                    std::cout << "-> You pulled Sukuna close, he is playing defensively, best to knock him off his feet.\n";
                 }
             }
             else {
-                std::cout << "You hit Sukuna with a " << Bdamage * smallmultiplier << " damage blue!\n";
-                s.sukuna_attacked(m, *this, Bdamage * smallmultiplier);
+                std::cout << "-> You hit Sukuna with a " << Bdamage << " damage blue!\n";
+                s.sukuna_attacked(m, *this, Bdamage);
             }
         }
         else if (s.SukunaCloseBy()) {
-            std::cout << "Sukuna is close by\n";
-            std::cout << "Do you want to push him away?\n 1-yes, 2-no: ";
+            std::cout << "-> Sukuna is close by\n";
+            std::cout << "==> Do you want to push him away?\n 1-yes, 2-no: ";
+            std::cout << "=> ";
             std::cin >> chooser;
             std::cout << '\n';
             if (chooser == 1) {
                 if (s.SukunaDefending()) {
                     s.move_far_defensively();
-                    std::cout << "You pushed sukuna away with blue, he is in a defensive state.\n";
+                    std::cout << "-> You pushed sukuna away with blue, he is in a defensive state.\n";
                 }
                 else if (s.SukunaOffense()) {
                     s.move_far_offensively();
-                    std::cout << "You pushed sukuna away with blue, he is focused on offense.\n";
+                    std::cout << "-> You pushed sukuna away with blue, he is focused on offense.\n";
                 }
             }
             else {
-                std::cout << "You hit Sukuna with a " << blue_base * midmultiplier << " damage Blue!\n";
-                s.sukuna_attacked(m, *this, blue_base * midmultiplier);
+                std::cout << "-> You hit Sukuna with a " << Bdamage << " damage Blue!\n";
+                s.sukuna_attacked(m, *this, Bdamage);
             }
         }
         take_CE(blue_ce_limit[bluecharge]);
@@ -1542,39 +1552,39 @@ void Gojo::Use_technique(Mahoraga& m, Sukuna& s) { // 1-blue 2-red 3-purple
         double Rdamage = red_base * red_multiplier[redcharge];
 
         if (cursed_energy < red_ce_limit[redcharge]) {
-            std::cout << "You dont have enough cursed energy left to activate Red!\n";
-            std::cout << "You need " << red_ce_limit[redcharge] - cursed_energy << " more cursed energy";
+            std::cout << "-> You dont have enough cursed energy left to activate Red!\n";
+            std::cout << "-> You need " << red_ce_limit[redcharge] - cursed_energy << " more cursed energy";
             return;
         }
 
         if (s.SukunaCloseBy()) {
 
-            std::cout << "Sukuna is in striking distance\n Blow him away with red?\n";
-            std::cout << "1-yes, 2-no\n";
+            std::cout << "==> Sukuna is in striking distance\n Blow him away with red?\n";
+            std::cout << "-> 1-yes, 2-no\n";
             std::cout << "=> ";
             int push; std::cin >> push;
             if (push == 1) {
                 if (s.SukunaOffense()) {
                     s.move_far_offensively();
-                    std::cout << "You blast Sukuna away with red, Sukuna will be trying to get close and attack frequently.\n";
+                    std::cout << "-> You blast Sukuna away with red, Sukuna will be trying to get close and attack frequently.\n";
                 }
                 else if (s.SukunaDefending()) {
                     s.move_far_defensively();
-                    std::cout << "You blast Sukuna away with red, he will probably use that to his advantage.\n";
+                    std::cout << "-> You blast Sukuna away with red, he will probably use that to his advantage.\n";
                 }
             }
             else {
-                std::cout << "You hit Sukuna with a " << Rdamage * smallmultiplier << " damage Red.\n";
-                s.sukuna_attacked(m, *this, Rdamage * smallmultiplier);
+                std::cout << "-> You hit Sukuna with a " << Rdamage << " damage Red.\n";
+                s.sukuna_attacked(m, *this, Rdamage);
             }
         }
         else {
-            std::cout << "You fire off a Red at Sukuna\n";
-            std::cout << "You hit Sukuna with a " << Rdamage << " damage Red!\n";
+            std::cout << "-> You fire off a Red at Sukuna\n";
+            std::cout << "-> You hit Sukuna with a " << Rdamage << " damage Red!\n";
             s.sukuna_attacked(m, *this, Rdamage);
         }
         take_CE(red_ce_limit[redcharge]);
-        std::cout << red_ce_limit[redcharge] << " amount of cursed energy was used.\n";
+        std::cout << "-> " << red_ce_limit[redcharge] << " amount of cursed energy was used.\n";
         break;
     }
     case CurrentCursedTechnique::Purple: {
@@ -1582,22 +1592,22 @@ void Gojo::Use_technique(Mahoraga& m, Sukuna& s) { // 1-blue 2-red 3-purple
         double Pdamage = purple_base * purple_multiplier[purplecharge];
 
         if (cursed_energy < purple_ce_limit[purplecharge]) {
-            std::cout << "You dont have enough cursed energy to pull off Purple\n";
-            std::cout << "You need " << purple_ce_limit[purplecharge] - cursed_energy << " more Cursed Energy!\n";
+            std::cout << "-> You dont have enough cursed energy to pull off Purple\n";
+            std::cout << "-> You need " << purple_ce_limit[purplecharge] - cursed_energy << " more Cursed Energy!\n";
             return;
         }
 
         s.sukuna_attacked(m, *this, Pdamage);
-        std::cout << "You hit Sukuna with a " << Pdamage << " damage Purple!\n";
+        std::cout << "-> You hit Sukuna with a " << Pdamage << " damage Purple!\n";
 
         take_CE(purple_ce_limit[purplecharge]);
-        std::cout << "Consumed CE Amount: " << purple_ce_limit[purplecharge] << '\n';
+        std::cout << "-> Consumed CE Amount: " << purple_ce_limit[purplecharge] << '\n';
 
         PurpleUsed();
         break;
     }
     case CurrentCursedTechnique::None:
-        std::cout << "You arent using any of the Limitless aside from Infinity currently\n";
+        std::cout << "-> You arent using any of the Limitless aside from Infinity currently\n";
         break;
     }
 }
@@ -1607,42 +1617,42 @@ void Mahoraga::mahoraga_status() {
     std::cout << '\n';
 
     if (state == MahoragaState::Destroyed) {
-        std::cout << "Mahoraga has been destroyed, It's time Sukuna goes down!\n";
+        std::cout << "-> Mahoraga has been destroyed, It's time Sukuna goes down!\n";
         return;
     }
 
     if (is_active()) {
         if (health < 25.0) {
-            std::cout << "Mahoraga is close to being defeated for good\n";
+            std::cout << "-> Mahoraga is close to being defeated for good\n";
         }
         else if (health < 75.0) {
-            std::cout << "Mahoraga is languishing, keep it up and he will be destroyed\n";
+            std::cout << "-> Mahoraga is languishing, keep it up and he will be destroyed\n";
         }
         else if (health < 150.0) {
-            std::cout << "Mahoraga is standing without a scratch, you'll need a big attack to finish him off\n";
+            std::cout << "-> Mahoraga is standing without a scratch, you'll need a big attack to finish him off\n";
         }
         else {
-            std::cout << "Mahoraga in all his beauty, you're going to be burned out at the end of this\n";
+            std::cout << "-> Mahoraga in all his beauty, you're going to be burned out at the end of this\n";
         }
     }
     else if (state == MahoragaState::WheelActive) {
-        std::cout << "Sukuna is using Mahoraga's wheel to adapt to your technique's\n";
+        std::cout << "-> Sukuna is using Mahoraga's wheel to adapt to your technique's\n";
     }
     else {
-        std::cout << "Mahoraga isn't currently active or fighting alongside Sukuna\n";
+        std::cout << "-> Mahoraga isn't currently active or fighting alongside Sukuna\n";
     }
 
     std::cout << "\n\n";
 
     switch (blue_nullification) {
     case BlueAdaptation::None:
-        std::cout << "Mahoraga hasn't adapted to blue.\n";
+        std::cout << "-> Mahoraga hasn't adapted to blue.\n";
         break;
     case BlueAdaptation::Partial:
-        std::cout << "Mahoraga has partially adapted to blue.\n";
+        std::cout << "-> Mahoraga has partially adapted to blue.\n";
         break;
     case BlueAdaptation::Full:
-        std::cout << "Mahoraga has adapted to blue!!!\n";
+        std::cout << "-> Mahoraga has adapted to blue!!!\n";
         break;
     }
 
@@ -1650,13 +1660,13 @@ void Mahoraga::mahoraga_status() {
 
     switch (red_nullification) {
     case RedAdaptation::None:
-        std::cout << "Mahoraga hasn't adapted to red.\n";
+        std::cout << "-> Mahoraga hasn't adapted to red.\n";
         break;
     case RedAdaptation::Partial:
-        std::cout << "Mahoraga has partially adapted to red.\n";
+        std::cout << "-> Mahoraga has partially adapted to red.\n";
         break;
     case RedAdaptation::Full:
-        std::cout << "Mahoraga has adapted to red!!!\n";
+        std::cout << "-> Mahoraga has adapted to red!!!\n";
         break;
     }
 
@@ -1665,25 +1675,25 @@ void Mahoraga::mahoraga_status() {
     switch (infinity_bypass) {
     case InfinityAdaptation::None:
         if (is_active()) {
-            std::cout << "Mahoraga hasn't adapted to infinity.. yet.\n";
-            std::cout << "The wheel has not spun.\n";
+            std::cout << "-> Mahoraga hasn't adapted to infinity.. yet.\n";
+            std::cout << "-> The wheel has not spun.\n";
         }
         break;
     case InfinityAdaptation::FirstSpin:
-        std::cout << "Mahoraga is slowly adapting to infinity,\n";
-        std::cout << "The wheel has spun once.\n";
+        std::cout << "-> Mahoraga is slowly adapting to infinity,\n";
+        std::cout << "-> The wheel has spun once.\n";
         break;
     case InfinityAdaptation::SecondSpin:
-        std::cout << "Mahoraga is slightly adapted to infinity,\n";
-        std::cout << "The wheel has spun twice.\n";
+        std::cout << "-> Mahoraga is slightly adapted to infinity,\n";
+        std::cout << "-> The wheel has spun twice.\n";
         break;
     case InfinityAdaptation::ThirdSpin:
-        std::cout << "Mahoraga has nearly adapted to infinity,\n";
-        std::cout << "The wheel has spun thrice.\n";
+        std::cout << "-> Mahoraga has nearly adapted to infinity,\n";
+        std::cout << "-> The wheel has spun thrice.\n";
         break;
     case InfinityAdaptation::FourthSpin:
-        std::cout << "Mahoraga is fully adapted to infinity.\n";
-        std::cout << "May god have mercy on your soul.\n";
+        std::cout << "-> Mahoraga is fully adapted to infinity.\n";
+        std::cout << "-> May god have mercy on your soul.\n";
         break;
     }
 
@@ -1694,51 +1704,51 @@ void Sukuna::sukuna_status() {
     std::cout << '\n' << '\n';
     switch (mood) {
     case SukunaMood::Amused:
-        std::cout << "Sukuna has an amused look on his face, he's enjoying the fight a bit too much.\n";
+        std::cout << "-> Sukuna has an amused look on his face, he's enjoying the fight a bit too much.\n";
         break;
     case SukunaMood::Smug:
-        std::cout << "Sukuna looks smug, that move seems to have boosted his confidence.\n";
+        std::cout << "-> Sukuna looks smug, that move seems to have boosted his confidence.\n";
         break;
     case SukunaMood::Calm:
-        std::cout << "Sukuna looks on with a calm demeanor, you wonder what he's cooking up for his next move.\n";
+        std::cout << "-> Sukuna looks on with a calm demeanor, you wonder what he's cooking up for his next move.\n";
         break;
     case SukunaMood::Intrigued:
-        std::cout << "Sukuna looks intrigued, maybe something has caught his eye.\n";
+        std::cout << "-> Sukuna looks intrigued, maybe something has caught his eye.\n";
         break;
     case SukunaMood::Joyous:
-        std::cout << "Sukuna looks on with a joyous grin, he's enjoying the challenge you're giving him.\n";
+        std::cout << "-> Sukuna looks on with a joyous grin, he's enjoying the challenge you're giving him.\n";
         break;
     case SukunaMood::KnockedOut:
-        std::cout << "Sukuna is out cold, this is your moment to get your hits in.\n";
+        std::cout << "-> Sukuna is out cold, this is your moment to get your hits in.\n";
         break;
     case SukunaMood::Desperate:
-        std::cout << "Sukuna is looking desperate, he'll try anything to take you down at all cost.\n";
+        std::cout << "-> Sukuna is looking desperate, he'll try anything to take you down at all cost.\n";
         break;
     case SukunaMood::Defeated:
-        std::cout << "Sukuna has lost the hope of beating you, he has a defeated look in his face.\n";
+        std::cout << "-> Sukuna has lost the hope of beating you, he has a defeated look in his face.\n";
         break;
     case SukunaMood::Anxious:
-        std::cout << "Sukuna feels anxiety as the stake's become high as they can ever hope to become.\n";
+        std::cout << "-> Sukuna feels anxiety as the stake's become high as they can ever hope to become.\n";
         break;
     case SukunaMood::Dead:
-        std::cout << "Sukuna has stopped breathing. You have killed Sukuna.\n";
+        std::cout << "-> Sukuna has stopped breathing. You have killed Sukuna.\n";
         break;
     default:
-        std::cout << "Sukuna has a look of unreadable malice on his face.\n";
+        std::cout << "-> Sukuna has a look of unreadable malice on his face.\n";
     }
     std::cout << '\n' << '\n';
     switch (fight_status) {
     case SukunaFightStatus::DefendingClose:
-        std::cout << "Sukuna is in a defensive stance, he is in striking distance.\n";
+        std::cout << "-> Sukuna is in a defensive stance, he is in striking distance.\n";
         break;
     case SukunaFightStatus::DefendingFar:
-        std::cout << "Sukuna maintains his distance, keeping a watchful eye on your movements.\n";
+        std::cout << "-> Sukuna maintains his distance, keeping a watchful eye on your movements.\n";
         break;
     case SukunaFightStatus::FightingClose:
-        std::cout << "Sukuna is applying pressure from the distance.\n";
+        std::cout << "-> Sukuna is applying pressure from the distance.\n";
         break;
     case SukunaFightStatus::FightingFar:
-        std::cout << "Sukuna goes on the offensive, right up in your face.\n";
+        std::cout << "-> Sukuna goes on the offensive, right up in your face.\n";
         break;
     }
     std::cout << '\n' << '\n';
@@ -1746,18 +1756,18 @@ void Sukuna::sukuna_status() {
 
 void Sukuna::sukuna_attacked(Mahoraga& m, Gojo& g, double damage) {
     if (m.is_active()) { // mahoraga active
-        std::cout << "Mahoraga takes the brunt of the attack!\n";
+        std::cout << "-> Mahoraga takes the brunt of the attack!\n";
         m.take_Damage(damage * 0.90);
         m.mahoraga_adapting(g, damage * 0.90);
-        std::cout << "Damage taken by Mahoraga: " << damage * 0.90 << "\n";
+        std::cout << "-> Damage taken by Mahoraga: " << damage * 0.90 << "\n";
         take_Damage(damage * 0.10);
-        std::cout << "Damage taken by Sukuna: " << damage * 0.10 << "\n";
+        std::cout << "-> Damage taken by Sukuna: " << damage * 0.10 << "\n";
         return;
     }
     else { // mahoraga not active
-        std::cout << "Sukuna took all the brunt of your attack!\n";
+        std::cout << "-> Sukuna took all the brunt of your attack!\n";
         take_Damage(damage);
-        std::cout << "Damage taken by Sukuna: " << damage << "\n";
+        std::cout << "-> Damage taken by Sukuna: " << damage << "\n";
     }
 }
 
@@ -1782,7 +1792,7 @@ void Sukuna::set_sukuna_mental_status() {
 void Sukuna::sukuna_turn(Gojo& g, Mahoraga& m) {
     if (health <= 0.0) return; 
     if (stunned) {
-        std::cout << "Sukuna is knocked out, his turn is forfeit\n";
+        std::cout << "-> Sukuna is knocked out, his turn is forfeit\n";
         return;
     }
 
@@ -1835,7 +1845,7 @@ void Sukuna::pet_mahoraga(Mahoraga& m) {
 
 void Sukuna::paralyzed() {
     if (stunned && stuntimer > 0) {
-        std::cout << "Sukuna has been stunned and his turn will be skipped";
+        std::cout << "-> Sukuna has been stunned and his turn will be skipped";
         stuntimer -= 1;
     }
     if (stuntimer <= 0) {
@@ -1846,24 +1856,24 @@ void Sukuna::paralyzed() {
 
 void Gojo::Purple(Mahoraga& m, Air& a, Sukuna& s) {
     if (purple_charge_started()) {
-        std::cout << "------------Hollow Purple!-----------\n";
-        std::cout << "You send out a hollow purple with one chant\n";
+        std::cout << "*------------Hollow Purple!-----------*\n";
+        std::cout << "-> You send out a hollow purple with one chant\n";
     }
     else if(purple_charge_partial()){
-        std::cout << "------------Hollow Purple!-----------\n";
-        std::cout << "You send out a hollow purple with two chants\n";
+        std::cout << "**------------Hollow Purple!-----------**\n";
+        std::cout << "-> You send out a hollow purple with two chants\n";
     }
     else if (purple_nearly_charged()) {
-        std::cout << "------------HOLLOW PURPLE!-----------\n";
-        std::cout << "You send out a hollow purple with three chants\n";
+        std::cout << "***------------HOLLOW PURPLE!-----------***\n";
+        std::cout << "-> You send out a hollow purple with three chants\n";
     }
     else if (purple_fully_charged()) {
-        std::cout << "------------HOLLOW TECHNIQUE: PURPLE!-----------\n";
-        std::cout << "You send out a fully chanted hollow purple\n";
+        std::cout << "****------------HOLLOW TECHNIQUE: PURPLE!-----------****\n";
+        std::cout << "-> You send out a fully chanted hollow purple\n";
     }
     else {
         std::cout << "------------Hollow Purple!-----------\n";
-        std::cout << "You send out an unchanted hollow purple\n";
+        std::cout << "-> You send out an unchanted hollow purple\n";
     }
 }
 
