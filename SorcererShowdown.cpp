@@ -3,10 +3,6 @@
 
 using namespace std;
 
-static const double SUKUNA_SLASH_DAMAGE = 15.0;
-
-
-
 class Character { // class 
 protected:
 	double health;
@@ -238,3 +234,4 @@ int main() { // main
 	Agito agito;
 	return 0;
 }
+
